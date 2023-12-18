@@ -78,10 +78,14 @@
 <form action="{% url 'StartUp_Page1:login' %}" method="post" id="loginForm" >
     {% csrf_token %}
     <h2>Login</h2>
+    <br>
 
     {{form}}
 
     <button type="submit">Login</button>
+
+    <a href="{% url 'StartUp_Page1:sgnUp' %}" style="margin-left: 19px;"> Create a new account!!😀</a>
+    
 
 </form>
 

@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django import forms
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
-
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 
 # class for Login
@@ -22,6 +22,7 @@ class NewForm_forSignUp(forms.Form):
 def display(request):
     return render(request, "StartUp_Page/startPage.html");
 
+@login_required(login_url = 'StartUp_Page1:login')
 def homePage(request):
     return render(request, "StartUp_Page/HomePage.html")
 
@@ -64,3 +65,10 @@ def signUp(request):
 
             
     return render(request, "StartUp_Page/signUpPage.html");
+
+
+
+
+def logoutFun(request):
+    logout(request)
+    return redirect('StartUp_Page1:login')
