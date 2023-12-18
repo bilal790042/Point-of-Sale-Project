@@ -74,14 +74,15 @@
 <body style="background-color: #ecf1f0;">
     
 
-    <form id="signupForm">
+    <form id="signupForm" method="post">
+        {% csrf_token %}
         <h3 style="text-align: center;">Sign Up</h3>
         <br> 
         <label for="newUsername">New Username:</label>
-        <input type="text" id="newUsername" name="newUsername" required>
+        <input type="text" id="newUsername" name="Username" required>
 
         <label for="newPassword">Password:</label>
-        <input type="password" id="newPassword" name="newPassword" required>
+        <input type="password" id="newPassword" name="Password" required>
 
         <label for="newPassword">Confirm Password:</label>
         <input type="password" id="confirmPassword" name="confirmPassword" required>

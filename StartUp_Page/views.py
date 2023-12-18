@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django import forms
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+
+
 
 # class for Login
 class NewForm_forSignIn(forms.Form):
@@ -19,14 +22,26 @@ class NewForm_forSignUp(forms.Form):
 def display(request):
     return render(request, "StartUp_Page/startPage.html");
 
+def homePage(request):
+    return render(request, "StartUp_Page/HomePage.html")
 
 def signIn(request):
     if request.method == "POST":
-        form = NewForm_forSignIn(request.POST)
-        if form.is_valid:
-            usname = form["username"]
-            paswrd = form["password"]
-            
+        usname = request.POST.get("username")
+        pswrd = request.POST.get("password")
+
+        user = authenticate(request, username = usname, password = pswrd)
+        if user is not None:
+            login(request, user)
+            return redirect('StartUp_Page1:homeP')
+
+
+        #form = NewForm_forSignIn(request.POST)
+        #if form.is_valid:
+        #   usname = form["username"]
+        #    paswrd = form["password"]
+
+
     return render(request, "StartUp_Page/SigninPage.html", {
         "form": NewForm_forSignIn()
     });
@@ -34,12 +49,18 @@ def signIn(request):
 
 def signUp(request):
     if request.method == "POST":
-        form = NewForm_forSignUp(request.POST)
-        if form.is_valid:
-            usname = form["username"]
-            paswrd = form["password"]
-            confirmPass = form["confimPass"]
+        usname = request.POST.get("Username")
+        paswrd = request.POST.get("Password")
+        confimPass = request.POST.get("confirmPassword")
+
+        if confimPass != paswrd:
+            return HttpResponse("Invalid Password not same")
+
+        else:
+            usr = User.objects.create_user(usname, paswrd, confimPass)
+            usr.save()
+
+            return redirect("StartUp_Page1:login")
+
             
-    return render(request, "StartUp_Page/signUpPage.html", {
-        "form": NewForm_forSignUp()
-    });
+    return render(request, "StartUp_Page/signUpPage.html");
