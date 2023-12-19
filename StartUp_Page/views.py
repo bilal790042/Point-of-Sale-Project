@@ -24,7 +24,29 @@ def display(request):
 
 @login_required(login_url = 'StartUp_Page1:login')
 def homePage(request):
-    return render(request, "StartUp_Page/HomePage.html")
+    return render(request, "Interfaces/index.html")
+
+def product(request):
+    return render(request, "Interfaces/product.html")
+
+
+def staff(request):
+    return render(request, "Interfaces/staff.html", {
+        "name": "name is bilal"
+    })
+
+
+def orders(request):
+    return render(request, "Interfaces/order.html", {
+        "name": "name is bilal"
+    })
+
+
+def profile(request):
+    return render(request, "Interfaces/profile.html", {
+        "name": "name is bilal"
+    })
+
 
 def signIn(request):
     if request.method == "POST":
