@@ -4,12 +4,21 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from .models import Product
 
 
+# Create your views here.
 # class for Login
 class NewForm_forSignIn(forms.Form):
     username = forms.CharField(label= "Username", required = True)
     password = forms.CharField(label= "Password", required = True)
+
+
+class productForm(forms.Form):
+
+    product = forms.CharField(label= "product", required = True)
+    quantity = forms.IntegerField(label= "quantity", required = True)
+    category = forms.CharField(label= "category", required = True)
 
 
 # class for Sign up
@@ -18,7 +27,8 @@ class NewForm_forSignUp(forms.Form):
     password = forms.CharField(label= "Password", required = True)
     confirmPass = forms.CharField(label= "Confirm Password", required = True)
    
-# Create your views here.
+
+
 def display(request):
     return render(request, "StartUp_Page/startPage.html");
 
@@ -27,7 +37,26 @@ def homePage(request):
     return render(request, "Interfaces/index.html")
 
 def product(request):
-    return render(request, "Interfaces/product.html")
+    if request.method == 'POST':
+        form = productForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("{% url 'StartUp_Page1:Product' %}")
+    else:
+        form = productForm()
+    items = Product.objects.all()
+    contex = {
+        'items': items,
+        'form':  form
+    }
+    return render(request, "Interfaces/product.html", contex)
+
+def prodDelete(request, pk):
+    item = Product.objects.get(id = pk)
+    if request.method == 'POST':
+        item.delete()
+        redirect('StartUp_Page1:Product')
+    return render(request, "Interfaces/products_delete.html")
 
 
 def staff(request):
